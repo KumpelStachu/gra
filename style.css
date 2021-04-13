@@ -67,12 +67,12 @@ button.reset.hidden {
     font-size: 1.2rem;
     outline: none;
     border: none;
-    width: 3rem;
 }
 
 .controls input {
     border-radius: 1rem 0.2rem 0.2rem 1rem;
     padding: 1px 0 1px 0.5rem;
+    width: 3rem;
 }
 
 .controls button {
@@ -82,6 +82,7 @@ button.reset.hidden {
     text-align: left;
     cursor: pointer;
     color: white;
+    width: 3.5rem;
 }
 
 .controls label {
@@ -95,7 +96,7 @@ button.reset.hidden {
 }
 
 .container {
-    max-width: calc(calc(var(--width) / var(--height) * min(90vw, 75vh)));
+    max-width: calc(calc(var(--width) / var(--height) * min(90vw, 85vh)));
     transition: max-width 0.5s, aspect-ratio 0.5s, transform 1s;
     grid-template-columns: repeat(var(--width), 1fr);
     grid-template-rows: repeat(var(--height), 1fr);
@@ -112,8 +113,8 @@ button.reset.hidden {
 }
 
 .container>* {
-    transition: transform 0.5s, border-radius 0.5s, box-shadow 0.5s;
-    box-shadow: 0 0 15px 0.2rem currentColor;
+    transition: transform 0.5s, border-radius 0.5s, box-shadow 0.5s, color 0.5s, background-color 0.5s;
+    box-shadow: 0 0 15px 0.5rem currentColor;
     transform-origin: center;
     transform: scale(0.7);
     border-radius: 45%;
@@ -129,4 +130,5 @@ button.reset.hidden {
 
 .container>.hidden {
     transform: scale(0);
+    border-radius: 0;
 }

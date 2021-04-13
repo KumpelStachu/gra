@@ -24,16 +24,16 @@ document.querySelector('button.start').onclick = async () => {
 	for (let i = 0; i < height * width; i++) {
 		const child = document.createElement('div')
 
+		child.onclick = changeColor
 		child.classList.add('hidden', 'glow')
 		container.append(child)
-
-		await delay(Math.max(50, 250 / (width + height)))
-
-		child.classList.remove('hidden')
 
 		const colors = randomRGB()
 		child.style.color = rgb(colors, 0.5)
 		child.style.backgroundColor = rgb(colors)
+
+		await delay(Math.max(50, 250 / (width + height)))
+		child.classList.remove('hidden')
 	}
 
 	resetBtn.classList.remove('hidden')
@@ -56,4 +56,10 @@ resetBtn.onclick = async () => {
 	container.innerHTML = ''
 
 	controls.classList.remove('hidden')
+}
+
+function changeColor({ target }) {
+	const colors = randomRGB()
+	target.style.color = rgb(colors, 0.5)
+	target.style.backgroundColor = rgb(colors)
 }
