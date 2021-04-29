@@ -6,7 +6,7 @@ const dropdown = document.querySelector('.dropdown')
 const resetBtn = document.querySelector('.reset')
 const root = document.documentElement
 
-let width, height, colors, board
+let width, height, colors
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 const randomRGB = () => [...Array(3)].map(() => Math.floor(Math.random() * 256))
@@ -34,22 +34,24 @@ document.querySelector('button.start').onclick = async () => {
 	container.classList.remove('hidden')
 	controls.classList.add('hidden')
 
-	for (let i = 0; i < height * width; i++) {
-		const child = document.createElement('div')
+	for (let y = 0; y < height; y++) {
+		for (let x = 0; x < width; x++) {
+			const child = document.createElement('div')
 
-		child.onclick = handleClick
-		child.classList.add('hidden', 'glow')
-		container.append(child)
+			child.onclick = handleClick
+			child.classList.add('hidden', 'glow')
+			container.append(child)
 
-		const color = randomColor()
-		child.style.color = rgb(color, 0.5)
-		child.style.backgroundColor = rgb(color)
-		child.dataset.color = color
-		child.dataset.x = child.x = i % height
-		child.dataset.y = child.y = (i - child.x) / width
+			const color = randomColor()
+			child.style.color = rgb(color, 0.5)
+			child.style.backgroundColor = rgb(color)
+			child.dataset.color = color
+			child.dataset.x = child.x = x
+			child.dataset.y = child.y = y
 
-		await delay(Math.max(50, 250 / (width + height)))
-		child.classList.remove('hidden')
+			await delay(Math.max(50, 250 / (width + height)))
+			child.classList.remove('hidden')
+		}
 	}
 
 	resetBtn.classList.remove('hidden')
@@ -79,7 +81,9 @@ dropdown.onmouseover = ({ target }) => {
 	if (target.classList.contains('white')) return
 
 	container.querySelectorAll('.dark').forEach(e => e.classList.remove('dark'))
-	container.querySelectorAll(`div:not([data-color="${target.dataset.color}"])`).forEach(e => e.classList.add('dark'))
+	container
+		.querySelectorAll(`div:not([data-color="${target.dataset.color}"])`)
+		.forEach(e => e.classList.add('dark'))
 
 	if (target.classList.contains('dropdown')) {
 		container.querySelectorAll('.dark').forEach(e => e.classList.remove('dark'))
@@ -92,7 +96,12 @@ function handleClick({ target }) {
 	const active = container.querySelector('.active')
 	if (!active) return target.classList.add('active')
 
-	if (active !== target && (((target.x === active.x - 1 || target.x === active.x + 1) && target.y === active.y) !== ((target.y === active.y - 1 || target.y === active.y + 1) && target.x === active.x)) && target.dataset.color === active.dataset.color) {
+	if (
+		active !== target &&
+		((target.x === active.x - 1 || target.x === active.x + 1) && target.y === active.y) !==
+			((target.y === active.y - 1 || target.y === active.y + 1) && target.x === active.x) &&
+		target.dataset.color === active.dataset.color
+	) {
 		active.classList.add('remove')
 		target.classList.add('remove')
 		update()
@@ -147,10 +156,14 @@ function update() {
 		}
 	}
 
-	container.querySelectorAll(`div[data-y="0"][data-x="${p1.x}"],div[data-y="${1 * (p1.x === p2.x)}"][data-x="${p2.x}"]`).forEach(e => {
-		e.classList.add('white')
-		e.dataset.color = ''
-	})
+	container
+		.querySelectorAll(
+			`div[data-y="0"][data-x="${p1.x}"],div[data-y="${1 * (p1.x === p2.x)}"][data-x="${p2.x}"]`
+		)
+		.forEach(e => {
+			e.classList.add('white')
+			e.dataset.color = ''
+		})
 
 	p1.classList.remove('remove')
 	p2.classList.remove('remove')
